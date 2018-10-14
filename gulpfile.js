@@ -5,7 +5,10 @@ const browserSync = require('browser-sync');
 gulp.task('sass', function() {
     return gulp.src('app/stylesheets/style.scss')
             .pipe(sass())
-            .pipe(gulp.dest('app/stylesheets'));
+            .pipe(gulp.dest('app/stylesheets'))
+            .pipe(browserSync.reload({
+                stream: true
+            }));
 });
 
 gulp.task('browserSync', function() {
