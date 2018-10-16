@@ -14,7 +14,6 @@ req.onload = function() {
 
     // loop through data and create new object for each cyclist
     json.forEach((cyclist) => {
-        year = Date.parse(cyclist.Year);
         time = cyclist.Time.split(":");
         newTime = new Date();
         newTime.setMinutes(time[0]);
@@ -24,7 +23,7 @@ req.onload = function() {
 
         dataset.push({
             time: newTime,
-            year: year,
+            year: cyclist.Year,
             name: cyclist.Name,
             desc: cyclist.Doping || 'No record of doping',
             country: cyclist.Nationality,
@@ -33,35 +32,24 @@ req.onload = function() {
         });
     });
 
+    console.log(dataset[0].time);
+
     // declare chart dimensions
     const width = 1080;
     const height = 600;
     const padding = 35;
-
-    // functions for formatting dates
-    function formatDate(type) {
-        if(type === 'Y') {
-            return d3.timeFormat('%Y');
-        } else if (type === 'M') {
-            return d3.timeFormat('%M:%S');
-        } else {
-            return false;
-        }
-    }
 
     // create tooltip
     const tip = d3.tip()
                 .attr('class', 'd3-tip')
                 .attr('id', 'tooltip')
                 .html((d) => {
-                    const year = formatDate('Y');
-                    const time = formatDate('M');
-
-                    d3.select('#tooltip').attr('data-year', year(d.year));
+                    const time = d3.timeFormat('%M:%S');
+                    d3.select('#tooltip').attr('data-year', d.year);
 
                     return `
                         ${d.name} (${d.country})<br>
-                        Time: ${time(d.time)} Year: ${year(d.year)}<br>
+                        Time: ${time(d.time)} Year: ${d.year}<br>
                         <br>
                         ${d.desc}
                     `;
@@ -81,8 +69,8 @@ req.onload = function() {
                     .range([padding, width - padding]);
 
     const yScale = d3.scaleLinear()
-                    .domain([d3.max(dataset, (d) => d.time), d3.min(dataset, (d) => d.time)])
-                    .range([height - padding, padding]);
+                    .domain([d3.min(dataset, (d) => d.time), d3.max(dataset, (d) => d.time)])
+                    .range([padding, height - padding]);
 
     // input data to chart
     svg.selectAll('circle')
@@ -93,10 +81,7 @@ req.onload = function() {
         .attr('cy', (d) => yScale(d.time))
         .attr('r', (d) => 5)
         .attr('class', 'dot')
-        .attr('data-xvalue', (d) => {
-            const format = formatDate('Y');
-            return format(d.year);
-        })
+        .attr('data-xvalue', (d) => d.year)
         .attr('data-yvalue', (d) => d.time)
         .style('fill', (d) => d.color)
         .on('mouseover', tip.show)
@@ -149,9 +134,9 @@ req.onload = function() {
 
     // create chart axes
     const xAxis = d3.axisBottom(xScale)
-                    .tickFormat(formatDate('Y'));
+                    .tickFormat(d3.format('d'));
     const yAxis = d3.axisLeft(yScale)
-                    .tickFormat(formatDate('M'));
+                    .tickFormat(d3.timeFormat('%M:%S'));
 
     // append axes to svg
     svg.append('g')
