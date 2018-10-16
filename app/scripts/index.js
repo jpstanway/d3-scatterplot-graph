@@ -32,8 +32,6 @@ req.onload = function() {
         });
     });
 
-    console.log(dataset[0].time);
-
     // declare chart dimensions
     const width = 1080;
     const height = 600;
@@ -45,13 +43,14 @@ req.onload = function() {
                 .attr('id', 'tooltip')
                 .html((d) => {
                     const time = d3.timeFormat('%M:%S');
+                    const desc = d.desc === 'No record of doping' ? d.desc : `${d.desc}<br><em>click for more info</em>`;
                     d3.select('#tooltip').attr('data-year', d.year);
 
                     return `
                         ${d.name} (${d.country})<br>
                         Time: ${time(d.time)} Year: ${d.year}<br>
                         <br>
-                        ${d.desc}
+                        ${desc}
                     `;
                 });                 
 
@@ -84,8 +83,16 @@ req.onload = function() {
         .attr('data-xvalue', (d) => d.year)
         .attr('data-yvalue', (d) => d.time)
         .style('fill', (d) => d.color)
+        .style('cursor', 'pointer')
         .on('mouseover', tip.show)
-        .on('mouseout', tip.hide);
+        .on('mouseout', tip.hide)
+        .on('click', (d) => {
+            if(d.desc === 'No record of doping') {
+                return false;
+            } else {
+                window.open(d.link);
+            }
+        });
 
     // create and append a legend
     svg.append('rect')
