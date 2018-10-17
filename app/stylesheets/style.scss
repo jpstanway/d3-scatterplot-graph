@@ -3,6 +3,7 @@
 
 body {
     font-family: 'Lato', 'Arial', sans-serif;
+    background-color: #eee;
 }
 
 h3 {
@@ -11,8 +12,13 @@ h3 {
 
 #container {
     width: 1080px;
-    margin: auto;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 3px;
+    border: 1px solid #595959;
+    box-shadow: 0px 0px 2px #595959;
     text-align: center;
+    background-color: #fff;
 }
 
 #title, #legend-title {

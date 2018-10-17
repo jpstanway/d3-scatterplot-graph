@@ -41,6 +41,7 @@ req.onload = function() {
     const tip = d3.tip()
                 .attr('class', 'd3-tip')
                 .attr('id', 'tooltip')
+                .direction((d) => d.year <= 2010 ? 'ne' : 'nw')
                 .html((d) => {
                     const time = d3.timeFormat('%M:%S');
                     const desc = d.desc === 'No record of doping' ? d.desc : `${d.desc}<br><span class="info"><em>click for more info</em></span>`;
