@@ -43,12 +43,12 @@ req.onload = function() {
                 .attr('id', 'tooltip')
                 .html((d) => {
                     const time = d3.timeFormat('%M:%S');
-                    const desc = d.desc === 'No record of doping' ? d.desc : `${d.desc}<br><em>click for more info</em>`;
+                    const desc = d.desc === 'No record of doping' ? d.desc : `${d.desc}<br><span class="info"><em>click for more info</em></span>`;
                     d3.select('#tooltip').attr('data-year', d.year);
 
                     return `
-                        ${d.name} (${d.country})<br>
-                        Time: ${time(d.time)} Year: ${d.year}<br>
+                        <h3>${d.name} (${d.country})</h3><br>
+                        <strong>Time:</strong> ${time(d.time)} <strong>Year:</strong> ${d.year}<br>
                         <br>
                         ${desc}
                     `;
@@ -65,11 +65,13 @@ req.onload = function() {
     // declare scales
     const xScale = d3.scaleLinear()
                     .domain([d3.min(dataset, (d) => d.year), d3.max(dataset, (d) => d.year)])
-                    .range([padding, width - padding]);
+                    .range([padding, width - padding])
+                    .nice();
 
     const yScale = d3.scaleLinear()
                     .domain([d3.min(dataset, (d) => d.time), d3.max(dataset, (d) => d.time)])
-                    .range([padding, height - padding]);
+                    .range([padding, height - padding])
+                    .nice();
 
     // input data to chart
     svg.selectAll('circle')
@@ -82,6 +84,7 @@ req.onload = function() {
         .attr('class', 'dot')
         .attr('data-xvalue', (d) => d.year)
         .attr('data-yvalue', (d) => d.time)
+        .style('stroke', '#000')
         .style('fill', (d) => d.color)
         .style('cursor', 'pointer')
         .on('mouseover', tip.show)
@@ -101,6 +104,7 @@ req.onload = function() {
         .attr('height', 100)
         .attr('x', width - padding - 250)
         .attr('y', 0)
+        .style('stroke', '#000')
         .style('fill', '#efefef');
 
     svg.append('text')
@@ -116,6 +120,7 @@ req.onload = function() {
         .attr('height', 25)
         .attr('x', width - padding - 87.5)
         .attr('y', 60)
+        .style('stroke', '#000')
         .style('fill', '#483d8b');
 
     svg.append('rect')
@@ -124,26 +129,29 @@ req.onload = function() {
         .attr('height', 25)
         .attr('x', width - padding - 187.5)
         .attr('y', 60)
+        .style('stroke', '#000')
         .style('fill', '#808b3d');
 
     svg.append('text')
         .attr('class', 'symbol-text')
-        .attr('x', width - padding - 190)
+        .attr('x', width - padding - 192)
         .attr('y', 50)
         .text('clean');    
 
     svg.append('text')
         .attr('class', 'symbol-text')
-        .attr('x', width - padding - 90)
+        .attr('x', width - padding - 92)
         .attr('y', 50)
         .text('dirty');    
 
 
     // create chart axes
     const xAxis = d3.axisBottom(xScale)
-                    .tickFormat(d3.format('d'));
+                    .tickFormat(d3.format('d'))
+                    .tickPadding(5);
     const yAxis = d3.axisLeft(yScale)
-                    .tickFormat(d3.timeFormat('%M:%S'));
+                    .tickFormat(d3.timeFormat('%M:%S'))
+                    .tickPadding(5);
 
     // append axes to svg
     svg.append('g')

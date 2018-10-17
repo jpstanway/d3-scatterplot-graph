@@ -1,7 +1,36 @@
+@import url('https://fonts.googleapis.com/css?family=Karla:400,700|Lato:400,400i,700');
 @import url('//rawgithub.com/Caged/d3-tip/master/examples/example-styles.css');
+
+body {
+    font-family: 'Lato', 'Arial', sans-serif;
+}
+
+h3 {
+    margin: 0;
+}
 
 #container {
     width: 1080px;
     margin: auto;
     text-align: center;
+}
+
+#title, #legend-title {
+    font-family: 'Karla', 'Georgia', sans-serif;
+    font-weight: bold;
+}
+
+.d3-tip {
+    background: rgba(207, 207, 196, 0.8);
+    color: #000;
+    border-radius: 3px;
+    font-weight: normal;
+}
+
+.info {
+    font-size: 0.8em;
+}
+
+.symbol-text {
+    font-style: italic;
 }
