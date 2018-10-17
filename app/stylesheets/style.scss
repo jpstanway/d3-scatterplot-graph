@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Karla:400,700|Lato:400,400i,700');
+@import url('https://fonts.googleapis.com/css?family=Karla:400,700,700i|Lato:400,400i,700');
 @import url('//rawgithub.com/Caged/d3-tip/master/examples/example-styles.css');
 
 body {
@@ -24,6 +24,16 @@ h3 {
 #title, #legend-title {
     font-family: 'Karla', 'Georgia', sans-serif;
     font-weight: bold;
+}
+
+#title {
+    margin: 0;
+}
+
+#subtitle {
+    font-style: italic;
+    font-size: 1.15em;
+    margin-top: 0;
 }
 
 .d3-tip {
